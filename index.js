@@ -9000,3 +9000,42 @@ const issues = [
     "url": "https://api.github.com/repos/learn-co-curriculum/js-donut-lab/issues/2"
   }
 ];
+var issuesWithUpdatedApiUrl = issues.map(function(element){
+  let newUrl = element.url.replace("api.github.com", "api-v2.github.com")
+  return Object.assign({}, element, { url: newUrl })
+})
+var commentCountAcrossIssues = issues.reduce(function(totalAmount, element){
+  return totalAmount + element.comments_count
+},0)
+var openIssues = issues.filter(function(element){
+  if(element.state == 'open'){
+    return element
+  }
+})
+var nonAutomaticIssues = issues.filter(function(element){
+  if(element.body !== "This pull request has been automatically created by learn.co."){
+    return element
+  }
+})
+var table = document.createElement('table');
+for (let i = 0, l = nonAutomaticIssues.length; i < l; i++){
+    var tr = document.createElement('tr');
+
+    var td1 = document.createElement('td');
+    var td2 = document.createElement('td');
+    var td3 = document.createElement('td')
+
+    var text1 = document.createTextNode(`${nonAutomaticIssues[i].body}`);
+    var text2 = document.createTextNode(`${nonAutomaticIssues[i].created_at}`);
+    var text3 = document.createTextNode(`${nonAutomaticIssues[i].state}`)
+
+    td1.appendChild(text1);
+    td2.appendChild(text2);
+    td3.appendChild(text3);
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+    tr.appendChild(td3);
+
+    document.getElementById("results").appendChild(tr);
+}
+document.body.appendChild(table);
